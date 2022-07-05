@@ -1,6 +1,6 @@
 defmodule DatabaseServer do
   def start do
-    spawn(&loop/0)
+    spawn(loop())
   end
 
   def run_async(server_pid, query_def) do
