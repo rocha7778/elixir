@@ -1,0 +1,2 @@
+:observer.start() ---> muestra la consola de procesos de elixir
+iex -S mix
