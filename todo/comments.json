@@ -1,0 +1,1 @@
+{ "a": [ { "nombre": "Rocha", "apellidos": "Luna", "posicion": "Dev", "sueldo": 35000 }, { "nombre": "Luis", "apellidos": "Sanchez", "sueldo": 35000, "posicion": "QA" }, { "posicion": "Dev", "nombre": "Elana", "apellidos": "Gomez", "sueldo": 35000 } ] }

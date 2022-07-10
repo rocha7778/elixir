@@ -22,6 +22,7 @@ defmodule MytestApp.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"}
+      {:saxy, "~> 1.4"},
     ]
   end
 end
