@@ -26,7 +26,8 @@ defmodule Todo.MixProject do
       {:saxy, "~> 1.4"},
       { :uuid, "~> 1.1" },
       {:jason, "~> 1.3"},
-      {:mint, "~> 1.4"}
+      {:mint, "~> 1.4"},
+      {:mock, "~> 0.3.7", only: :test},
     ]
   end
 end
