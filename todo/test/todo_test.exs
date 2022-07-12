@@ -29,12 +29,31 @@ defmodule TodoTest do
         transport: Mint.Core.Transport.TCP
       }}
 
+      request =  %{
+        body: nil,
+        connection: [],
+        content_length: nil,
+        data_buffer: [],
+        headers_buffer: [],
+        method: "GET",
+        ref: "#Reference<0.1291779294.3723493381.1180>",
+        state: :status,
+        status: nil,
+        transfer_encoding: [],
+        version: nil
+      }
+
+    map = elem(conn,1)
+    map = %{map | request: request}
+    conn_request = {:ok , map, "#Reference<0.1291779294.3723493381.1180>"}
+
       with_mocks ([
-        {Mint.HTTP, [], [connect: fn (_protocol, _host, _port) -> conn end ]}
+        {Mint.HTTP, [], [connect: fn (_protocol, _host, _port) -> conn end ]},
+        {Mint.HTTP, [], [request: fn (conn, _method = "GET", _path = "/users", _headers=[],nil) -> conn_request end ]}
 
       ]) do
 
-       assert conn == MintTest.test()
+       assert conn_request == MintTest.test()
       end
     end
 
