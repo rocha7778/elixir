@@ -28,6 +28,7 @@ defmodule Todo.MixProject do
       {:jason, "~> 1.3"},
       {:mint, "~> 1.4"},
       {:mock, "~> 0.3.7", only: :test},
+      {:lens, "~> 1.0.0"}
     ]
   end
 end

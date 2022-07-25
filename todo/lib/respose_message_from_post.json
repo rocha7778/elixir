@@ -1,0 +1,48 @@
+[
+  {:status, #Reference<0.832042484.4186439681.111718>, 200},
+  {:headers, #Reference<0.832042484.4186439681.111718>,
+   [
+     {"content-type", "application/xml; charset=utf-8"},
+     {"content-length", "1481"},
+     {"date", "Mon, 18 Jul 2022 18:10:22 GMT"},
+     {"connection", "keep-alive"},
+     {"keep-alive", "timeout=5"}
+   ]},
+  {:data, #Reference<0.832042484.4186439681.111718>,
+   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<tns:esbXML xmlns:tns=\"http://grupobancolombia.com/intf/IL/esbXML/V3.0\">\r\n\t<Header>\r\n\t\t<systemId>SVP</systemId>\r\n\t\t<messageId>00000000412823001442</messageId>\r\n\t\t<interactionData>\r\n\t\t\t<timestamp>2019-08-14T11:28:04.354310</timestamp>\r\n\t\t</interactionData>\r\n\t\t<requestData>\r\n\t\t\t<userId>\r\n\t\t\t\t<userName>USER</userName>\r\n\t\t\t</userId>\r\n\t\t\t<destination>\r\n\t\t\t\t<name>ActivarCDT</name>\r\n\t\t\t\t<namespace>http://grupobancolombia.com/intf/SegmentosdePersonas/AhorroeInversionPersonas/ActivarCDT/V1.0</namespace>\r\n\t\t\t\t<operation>abrirCDT</operation>\r\n\t\t\t</destination>\r\n\t\t</requestData>\r\n\t</Header>\r\n\t<Body>\r\n\t\t<ns1:recuperarParametrizacionEquivalencias xmlns:ns1=\"http://grupobancolombia.com/intf/componente/tecnico/homologacion/RecuperarParametrizacionEquivalencias/V2.0\">\r\n\t\t\t<requerimientoParametrizacion>\r\n\t\t\t\t<encabezadoHomologacion>\r\n\t\t\t\t\t<aplicacionOrigen>CIF</aplicacionOrigen>\r\n\t\t\t\t\t<aplicacionDestino>CRM-VENTAS</aplicacionDestino>\r\n\t\t\t\t\t<sociedadOrigen>1000</sociedadOrigen>\r\n\t\t\t\t\t<sociedadDestino>1000</sociedadDestino>\r\n\t\t\t\t</encabezadoHomologacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>ADRTP</tipologia>\r\n\t\t\t\t\t<valorOrigen>1</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>CONTROL TERCEROS</tipologia>\r\n\t\t\t\t\t<valorOrigen>PEPE</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t</requerimientoParametrizacion>\r\n\t\t</ns1:recuperarParametrizacionEquivalencias>\r\n\t</Body>\r\n</tns:esbXML>\r\n"},
+  {:done, #Reference<0.832042484.4186439681.111718>}
+]
+{%Mint.HTTP1{
+   buffer: "",
+   host: "localhost",
+   mode: :active,
+   port: 3000,
+   private: %{},
+   proxy_headers: [],
+   request: nil,
+   requests: {[], []},
+   scheme_as_string: "http",
+   socket: #Port<0.5>,
+   state: :open,
+   streaming_request: nil,
+   transport: Mint.Core.Transport.TCP
+ }, :ok,
+ ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<tns:esbXML xmlns:tns=\"http://grupobancolombia.com/intf/IL/esbXML/V3.0\">\r\n\t<Header>\r\n\t\t<systemId>SVP</systemId>\r\n\t\t<messageId>00000000412823001442</messageId>\r\n\t\t<interactionData>\r\n\t\t\t<timestamp>2019-08-14T11:28:04.354310</timestamp>\r\n\t\t</interactionData>\r\n\t\t<requestData>\r\n\t\t\t<userId>\r\n\t\t\t\t<userName>USER</userName>\r\n\t\t\t</userId>\r\n\t\t\t<destination>\r\n\t\t\t\t<name>ActivarCDT</name>\r\n\t\t\t\t<namespace>http://grupobancolombia.com/intf/SegmentosdePersonas/AhorroeInversionPersonas/ActivarCDT/V1.0</namespace>\r\n\t\t\t\t<operation>abrirCDT</operation>\r\n\t\t\t</destination>\r\n\t\t</requestData>\r\n\t</Header>\r\n\t<Body>\r\n\t\t<ns1:recuperarParametrizacionEquivalencias xmlns:ns1=\"http://grupobancolombia.com/intf/componente/tecnico/homologacion/RecuperarParametrizacionEquivalencias/V2.0\">\r\n\t\t\t<requerimientoParametrizacion>\r\n\t\t\t\t<encabezadoHomologacion>\r\n\t\t\t\t\t<aplicacionOrigen>CIF</aplicacionOrigen>\r\n\t\t\t\t\t<aplicacionDestino>CRM-VENTAS</aplicacionDestino>\r\n\t\t\t\t\t<sociedadOrigen>1000</sociedadOrigen>\r\n\t\t\t\t\t<sociedadDestino>1000</sociedadDestino>\r\n\t\t\t\t</encabezadoHomologacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>ADRTP</tipologia>\r\n\t\t\t\t\t<valorOrigen>1</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>CONTROL TERCEROS</tipologia>\r\n\t\t\t\t\t<valorOrigen>PEPE</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t</requerimientoParametrizacion>\r\n\t\t</ns1:recuperarParametrizacionEquivalencias>\r\n\t</Body>\r\n</tns:esbXML>\r\n"],
+ :complete}
+{%Mint.HTTP1{
+   buffer: "",
+   host: "localhost",
+   mode: :active,
+   port: 3000,
+   private: %{},
+   proxy_headers: [],
+   request: nil,
+   requests: {[], []},
+   scheme_as_string: "http",
+   socket: #Port<0.5>,
+   state: :open,
+   streaming_request: nil,
+   transport: Mint.Core.Transport.TCP
+ }, :ok,
+ ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<tns:esbXML xmlns:tns=\"http://grupobancolombia.com/intf/IL/esbXML/V3.0\">\r\n\t<Header>\r\n\t\t<systemId>SVP</systemId>\r\n\t\t<messageId>00000000412823001442</messageId>\r\n\t\t<interactionData>\r\n\t\t\t<timestamp>2019-08-14T11:28:04.354310</timestamp>\r\n\t\t</interactionData>\r\n\t\t<requestData>\r\n\t\t\t<userId>\r\n\t\t\t\t<userName>USER</userName>\r\n\t\t\t</userId>\r\n\t\t\t<destination>\r\n\t\t\t\t<name>ActivarCDT</name>\r\n\t\t\t\t<namespace>http://grupobancolombia.com/intf/SegmentosdePersonas/AhorroeInversionPersonas/ActivarCDT/V1.0</namespace>\r\n\t\t\t\t<operation>abrirCDT</operation>\r\n\t\t\t</destination>\r\n\t\t</requestData>\r\n\t</Header>\r\n\t<Body>\r\n\t\t<ns1:recuperarParametrizacionEquivalencias xmlns:ns1=\"http://grupobancolombia.com/intf/componente/tecnico/homologacion/RecuperarParametrizacionEquivalencias/V2.0\">\r\n\t\t\t<requerimientoParametrizacion>\r\n\t\t\t\t<encabezadoHomologacion>\r\n\t\t\t\t\t<aplicacionOrigen>CIF</aplicacionOrigen>\r\n\t\t\t\t\t<aplicacionDestino>CRM-VENTAS</aplicacionDestino>\r\n\t\t\t\t\t<sociedadOrigen>1000</sociedadOrigen>\r\n\t\t\t\t\t<sociedadDestino>1000</sociedadDestino>\r\n\t\t\t\t</encabezadoHomologacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>ADRTP</tipologia>\r\n\t\t\t\t\t<valorOrigen>1</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t\t<criterioParametrizacion>\r\n\t\t\t\t\t<tipologia>CONTROL TERCEROS</tipologia>\r\n\t\t\t\t\t<valorOrigen>PEPE</valorOrigen>\r\n\t\t\t\t</criterioParametrizacion>\r\n\t\t\t</requerimientoParametrizacion>\r\n\t\t</ns1:recuperarParametrizacionEquivalencias>\r\n\t</Body>\r\n</tns:esbXML>\r\n"],
+ :complete}

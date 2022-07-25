@@ -1,2 +1,5 @@
 :observer.start() ---> muestra la consola de procesos de elixir
 iex -S mix
+mix coveralls.detail | less -R
+
+mix coveralls.detail --filter general.ex
