@@ -1,5 +1,0 @@
-Compiling 2 files (.ex)
-
-== Compilation error in file lib/mint_test.ex ==
-** (CompileError) lib/mint_test.ex:14: undefined function handle_responses/2 (expected MintTest to define such a function or for it to be imported, but none are available)
-

@@ -2,6 +2,7 @@ defmodule Calculadora do
   use GenServer
 
   alias __MODULE__, as: Calcular
+  alias Cal
 
   def start_link(), do: GenServer.start_link(Calcular, :ok, name: Calcular)
 
@@ -11,10 +12,11 @@ defmodule Calculadora do
       start: {Calcular, :start_link, []}
     }
   end
+  @expiry_idle_timeout :timer.seconds(10)
 
   def init(:ok) do
     IO.puts("[GCalc] Iniciando GenServer")
-    {:ok, 0}
+    {:ok, 0, @expiry_idle_timeout}
   end
 
 
@@ -24,15 +26,26 @@ defmodule Calculadora do
   def div(a,b), do: GenServer.call(Calcular,{:div,a,b})
 
   def handle_call({:add,a,b}, _from , state) do
-    {:reply, Cal.add(a+b), state+1}
+    {uSecs, result} = :timer.tc(Cal, :add, [a,b])
+    
+    IO.inspect(uSecs, label: :micro_second)
+    IO.inspect(result, label: :result)
+    {:reply, Cal.add(a,b), state+1 , @expiry_idle_timeout}
   end
+
   def handle_call({:mul,a,b}, _from , state) do
-    {:reply, Cal.mul(a*b), state+1}
+    {:reply, Cal.mul(a,b), state+1, @expiry_idle_timeout}
   end
   def handle_call({:sub,a,b}, _from , state) do
-    {:reply, Cal.sub(a-b), state+1}
+    {:reply, Cal.sub(a,b), state+1, @expiry_idle_timeout}
   end
   def handle_call({:div,a,b}, _from , state) do
-    {:reply, Cal.div(a/b), state+1}
+    {:reply, Cal.div(a,b), state+1, @expiry_idle_timeout}
+  end
+
+
+  def handle_info(:timeout, state) do
+    IO.puts("Stopping server for state #{state}")
+    {:stop, :normal, state}
   end
 end

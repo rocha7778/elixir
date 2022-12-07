@@ -1,0 +1,44 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Cuenta",
+    "description": "Representa la cuenta a consultar",
+    "type": "object",
+    "required": ["data"],
+    "properties": {
+        "data": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required":["account"],
+                "properties": {
+                    "account" :{
+                        "$ref" : "#/definitions/account"
+                    }
+                }
+            },
+            "minItems": 1,
+            "maxItems": 1
+        }
+    },
+    "definitions": {
+        "account": {
+            "type": "object",
+            "required": [
+                "type",
+                "number"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Tipo de cuenta, indica si es ahorros o corriente.",
+                    "example": "CUENTA_DE_AHORRO"
+                },
+                "number": {
+                    "type": "string",
+                    "description": "Número de cuenta.",
+                    "example": "91200244139"
+                }
+            }
+        }
+    }
+  }

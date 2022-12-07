@@ -3,3 +3,32 @@ iex -S mix
 mix coveralls.detail | less -R
 
 mix coveralls.detail --filter general.ex
+mix coveralls.html to generate html report
+
+
+
+MIX_ENV=test iex -S mix
+MIX_ENV=dev iex -S mix
+MIX_ENV=pnd iex -S mix
+
+
+:debugger.start()
+:int.ni(Todo.Server)
+:int.break(Todo.Server, 32)
+
+:timer.sleep(6000);
+
+Stack.__info__(:functions)
+
+pid = Process.whereis(Todo.Cache)
+
+Process.exit(pid, :kill)
+
+
+:erlang.system_info(:process_count)
+
+Consultar Origen Demonio, Lucifer, Satanas
+
+pid = Process.whereis(Todo.Database)
+
+Process.exit(pid, :kill)
