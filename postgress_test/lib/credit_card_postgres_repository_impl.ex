@@ -4,6 +4,7 @@ defmodule CreditCardInformation.Adapters.Repositories.CreditCardPostgresReposito
   Postgres database.
   """
 
+  # alias CreditCardInformation.Adapters.Repositories.CreditCardPostgresRepositoryImpl
   # CreditCardPostgresRepositoryImpl.get_customer_number("0000377813384145240")
   # CreditCardPostgresRepositoryImpl.get_customer_info_with_customer_number("0000377813384145240")
   # CreditCardPostgresRepositoryImpl.get_customer_info_without_customer_number("0000377813384145240")

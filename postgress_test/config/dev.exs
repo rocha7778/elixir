@@ -6,7 +6,7 @@ config :logger, :console, level: :debug, format: "[$level] [$date] [$time] $mess
 # Database connection
 config :postgress_test,
 CreditCardInformation.Ecto.Repo,
-       log: false,
+       log: true,
        database: "experimentos",
        username: "postgres",
        password: "123456",

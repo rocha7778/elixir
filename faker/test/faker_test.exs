@@ -1,8 +1,7 @@
 defmodule FakerTest do
-  use ExUnit.Case
-  doctest Faker
+  use ExUnit.Case, async: true
 
-  test "greets the world" do
-    assert Faker.hello() == :world
+  test :format do
+    assert Regex.match?(~r/\w{3}\d{4}@\w{4}\.\w{3}/, Faker.format("???####@????.???"))
   end
 end

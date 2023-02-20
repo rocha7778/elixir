@@ -1,28 +1,69 @@
-defmodule Faker.MixProject do
+defmodule Faker.Mixfile do
   use Mix.Project
+
+  @source_url "https://github.com/elixirs/faker"
+  @version "0.17.0"
 
   def project do
     [
       app: :faker,
-      version: "0.1.0",
-      elixir: "~> 1.13",
-      start_permanent: Mix.env() == :prod,
-      deps: deps()
+      version: @version,
+      elixir: "~> 1.6",
+      description: "Faker is a pure Elixir library for generating fake data.",
+      package: package(),
+      name: "Faker",
+      deps: deps(),
+      docs: docs(),
+      dialyzer: [
+        flags: [
+          :error_handling,
+          :race_conditions,
+          :underspecs
+        ]
+      ]
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      applications: [:crypto],
+      env: env()
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
+  defp env do
+    [
+      locale: :en,
+      country: nil,
+      random_module: Faker.Random.Elixir
+    ]
+  end
+
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:earmark, ">= 0.0.0", only: :dev, runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["CHANGELOG.md", "README.md"],
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
+      source_url: @source_url,
+      source_ref: "v#{@version}"
+    ]
+  end
+
+  defp package do
+    %{
+      maintainers: ["Anthony Smith", "Igor Kapkov", "Toby Hinloopen", "Vitor Oliveira"],
+      files: ["lib", "mix.exs", "mix.lock", "README.md", "LICENSE", "CHANGELOG.md"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
+    }
   end
 end

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: elixir
+spec:
+  containers:
+  - name: elixir
+    image: elixir:latest
+    ports:
+    - containerPort: 80

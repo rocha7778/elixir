@@ -23,7 +23,8 @@ defmodule PostgressTest.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.7.2"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:plug_cowboy, "~> 1.0"}
     ]
   end
 end

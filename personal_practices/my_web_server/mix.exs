@@ -25,7 +25,12 @@ defmodule WebServer.MixProject do
     [
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.2.0"},
-      {:distillery, "~> 2.1"}
+      {:distillery, "~> 2.1"},
+      {:mint, "~> 1.4"},
+      {:castore, "~> 0.1.0"},
+      {:telemetry, "~> 1.0"},
+      {:telemetry_metrics, "~> 0.6.1"},
+      {:telemetry_metrics_prometheus, "~> 1.1.0"}
     ]
   end
 end
