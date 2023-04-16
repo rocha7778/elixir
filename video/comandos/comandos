@@ -32,3 +32,5 @@ Consultar Origen Demonio, Lucifer, Satanas
 pid = Process.whereis(Todo.Database)
 
 Process.exit(pid, :kill)
+
+

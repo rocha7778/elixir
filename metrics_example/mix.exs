@@ -24,7 +24,8 @@ defmodule MetricsExample.MixProject do
     [
       {:telemetry, "~> 1.0"},
       {:telemetry_metrics, "~> 0.6.1"},
-      {:telemetry_metrics_prometheus, "~> 1.1.0"}
+      {:telemetry_metrics_prometheus, "~> 1.1.0"},
+      {:telemetry_poller, "~> 1.0"}
     ]
   end
 end

@@ -1,0 +1,30 @@
+{
+    "Valor_trans__programada": 0,
+    "Valor_total_de_la_Meta": 150,
+    "Usuario_de_modificacion": null,
+    "Usuario_de_creacion": "braquint",
+    "Transferencia_programada": "N",
+    "Tipo_de_cuenta": "S",
+    "Saldo_del_bolsillo": 0,
+    "Periodicidad_ahorro": "",
+    "Numero_de_Cuenta": {
+        "$numberLong": "40674618924"
+    },
+    "Nombre_del_bolsillo": "SEGURO",
+    "Hora_de_modificacion": null,
+    "Hora_de_creacion": 111652,
+    "Fecha_inicio_trans_programada": 0,
+    "Fecha_inicio_ahorro": 0,
+    "Fecha_fin_trans_programada": 0,
+    "Fecha_fin_ahorro": 0,
+    "Fecha_de_modificacion": 0,
+    "Fecha_de_creacion": 20230411,
+    "Fecha_Cancelacion": 0,
+    "Estado_del_bolsillo": "A",
+    "Dia_trans__programada": 0,
+    "Codigo_del_bolsillo": 1,
+    "Codigo_de_categoria": 2,
+    "Campo_Libre_3": null,
+    "Campo_Libre_2": null,
+    "Campo_Libre_1": null
+}

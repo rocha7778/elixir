@@ -15,3 +15,18 @@ end
 
 Enum.each(1..5, &async_query.("query #{&1}"))
 
+
+Registry.start_link(keys: :unique, name: :my_registry)
+
+spawn(fn ->
+   Registry.register(:my_registry, {:database_worker,1},nil)
+
+   receive do
+      message -> IO.puts("got mesasge #{inspect(message)}")
+   end
+end)
+
+
+[{db_worker_pid, _value}] = Registry.lookup(:my_registry, {:database_worker,1})
+
+send(db_worker_pid, :some_message)

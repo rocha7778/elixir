@@ -30,7 +30,8 @@ defmodule WebServer.MixProject do
       {:castore, "~> 0.1.0"},
       {:telemetry, "~> 1.0"},
       {:telemetry_metrics, "~> 0.6.1"},
-      {:telemetry_metrics_prometheus, "~> 1.1.0"}
+      {:telemetry_metrics_prometheus, "~> 1.1.0"},
+      {:request_validator, "~> 0.6"}
     ]
   end
 end
