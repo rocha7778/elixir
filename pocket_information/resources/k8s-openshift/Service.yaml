@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ${APPLICATION_NAME}
+  name: ${APPLICATION_NAME}
+  namespace: ${NAMESPACE}
+spec:
+  ports:
+    - name: ${CONTAINER_PORT}-tcp
+      port: ${CONTAINER_PORT}
+      protocol: TCP
+      targetPort: ${CONTAINER_PORT}
+    - name: ${METRIC_PORT}-tcp
+      port: ${METRIC_PORT}
+      protocol: TCP
+      targetPort: ${METRIC_PORT}
+  selector:
+    app: ${APPLICATION_NAME}
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,244 @@
+trigger:
+  branches:
+    include:
+      - trunk
+
+variables:
+  - name: componentName
+    value: "pocket_information"
+  - name: applicationName
+    value: "pocket_information"
+  - name: directoryPath
+    value: "pocket_information"
+
+stages:
+  - stage: pipeline_build
+    displayName: "Pipeline Build"
+    jobs:
+      - job: Build
+        pool:
+          name: Build
+          demands:
+            - Agent.OS -equals Linux
+        steps:
+          - task: Cache@2
+            inputs:
+              key: 'mix | "$(Agent.OS)" | **/mix.exs'
+              restoreKeys: |
+                mix | "$(Agent.OS)"
+                mix
+              path: $(directoryPath)/deps
+            displayName: Cache mix packages
+
+          - task: SonarQubePrepare@4
+            displayName: "Prepare analysis on SonarQube"
+            inputs:
+              SonarQube: SonarQube
+              scannerMode: CLI
+              configMode: manual
+              cliProjectKey: "$(Build.Repository.Name)_$(componentName)"
+              cliProjectName: "$(Build.Repository.Name)_$(componentName)"
+              cliProjectVersion: "$(Build.BuildNumber)"
+              extraProperties: |
+                sonar.sources=$(directoryPath)/lib/
+                sonar.tests=$(directoryPath)/test/
+                sonar.exclusions=**/_build
+                sonar.externalIssuesReportPaths=$(directoryPath)/credo_sonarqube.json
+                sonar.coverageReportPaths=$(directoryPath)/cover/excoveralls.xml
+
+          - task: devops-git-auth-task@1
+
+          - task: Bash@3
+            displayName: "Build"
+            inputs:
+              targetType: "inline"
+              workingDirectory: $(directoryPath)
+              script: |
+                mix local.hex --force
+                mix local.rebar --force
+                mix deps.clean --unused
+                mix deps.get
+                mix deps.compile
+                MIX_ENV=test mix coveralls.xml --max-cases 50
+
+          - task: Bash@3
+            displayName: "Static code analysis"
+            inputs:
+              targetType: "inline"
+              workingDirectory: $(directoryPath)
+              script: |
+                mix credo --sonarqube-base-folder "$(directoryPath)/" --sonarqube-file credo_sonarqube.json --mute-exit-status
+                mix sobelow
+
+          - task: SonarQubeAnalyze@4
+            displayName: "Run Code Analysis"
+
+          - task: Sonar-buildbreaker@8
+            displayName: "Break Build on Quality Gate Failure"
+            inputs:
+              SonarQube: SonarQube
+
+          - task: PublishTestResults@2
+            displayName: "Publish Test Results"
+            inputs:
+              testResultsFormat: "JUnit"
+              testResultsFiles: "*.xml"
+              searchFolder: "$(System.DefaultWorkingDirectory)/$(directoryPath)/_build/test/lib/$(applicationName)/"
+              mergeTestResults: true
+
+          - task: Bash@3
+            displayName: "Prepare artifact"
+            inputs:
+              targetType: "inline"
+              workingDirectory: $(directoryPath)
+              script: |
+                mv deps ../deps
+                rm -rf *.md azure-pipelines.yaml .git .gitignore test deps cover _build
+
+          - task: ArchiveFiles@2
+            displayName: "Archive Files"
+            inputs:
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/$(directoryPath)"
+              includeRootFolder: false
+              archiveType: tar
+              tarCompression: gz
+              archiveFile: "$(Build.SourceBranchName)-$(Build.BuildNumber).tar.gz"
+              replaceExistingArchive: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact: $(componentName)"
+            inputs:
+              PathtoPublish: "$(Build.SourceBranchName)-$(Build.BuildNumber).tar.gz"
+              ArtifactName: $(componentName)
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish: Performance Test"
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/$(directoryPath)/resources/performance_test'
+              ArtifactName: 'performance_test'
+
+          - task: Gradle@2
+            displayName: 'gradlew build Acceptance Test'
+            inputs:
+              gradleWrapperFile: "$(System.DefaultWorkingDirectory)/$(directoryPath)/resources/acceptance_test/gradlew"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/$(directoryPath)/resources/acceptance_test"
+              tasks: 'clean build -x test '
+              publishJUnitResults: false
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish: Acceptance Test"
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/$(directoryPath)/resources/acceptance_test'
+              ArtifactName: 'acceptance_test'
+
+          - task: Shell++@0
+            displayName: "Build SSL Resources"
+            inputs:
+              type: 'InlineScript'
+              script: |
+                #!/bin/bash
+                roleIDVault="$(ROLE_ID_VAULT)"
+                secretIDVault="$(SECRET_ID_VAULT)"
+                urlVault="$(URL_VAULT)"
+                
+                pathKeyStore="$(System.DefaultWorkingDirectory)/ssl_resources"
+                pathReal="$(System.DefaultWorkingDirectory)/real"
+                
+                mkdir -p $pathKeyStore
+                mkdir -p $pathReal
+                
+                echo "-----------------------------------"
+                
+                echo "Obteniendo token para autenticación"
+                tmpToken="tmpToken.json"
+                
+                curl -k --header "Content-Type: application/json" --request POST --data '{"role_id": "'$roleIDVault'","secret_id": "'$secretIDVault'"}' $urlVault/v1/auth/approle/login > $tmpToken
+                
+                vaultToken=$(jq -r .auth.client_token $tmpToken)
+                
+                
+                echo "######creando keystore#######"
+                
+                echo "Obteniendo certificado publico depositos "
+                curl -k -H  "X-Vault-Token: $vaultToken" $urlVault/v1/kv/data/integracion/OpenShift/deposits-services/certs/depositsservices.ambientesbc.lab.cer > tmp.json
+                echo "---------###########-------------"
+                cat tmp.json
+                
+                jq -r .data.data.cert tmp.json > depositsservices.ambientesbc.lab.pem
+                echo "---------certificado depositsservices.ambientesbc.lab.pem-------------"
+                cat depositsservices.ambientesbc.lab.pem
+                cp depositsservices.ambientesbc.lab.pem $pathReal
+                
+                echo "Obteniendo llave privada depositos "
+                curl -k -H  "X-Vault-Token: $vaultToken" $urlVault/v1/kv/data/integracion/OpenShift/deposits-services/secrets/deposits-private-des.key > tmp.json
+                echo "---------###########-------------"
+                cat tmp.json
+                
+                jq -r .data.data.key tmp.json > deposits-privatekey.ambientesbc.lab.pem
+                echo "---------llave debitcardkey.ambientesbc.lab.pem-------------"
+                cat deposits-privatekey.ambientesbc.lab.pem
+                cp deposits-privatekey.ambientesbc.lab.pem $pathReal
+                
+                ls -l $pathReal
+                
+                openssl pkcs12 -export -name "bolsillosdepositos" -in $pathReal/depositsservices.ambientesbc.lab.pem -inkey $pathReal/deposits-privatekey.ambientesbc.lab.pem -out $pathKeyStore/keystore.p12 -password pass:"$(SSL_KEY_PASSWORD)"
+                
+                ls -l $pathKeyStore
+                
+                echo "Obteniendo certificado CA Banco - public"
+                curl -k -H  "X-Vault-Token: $vaultToken" $urlVault/v1/kv/data/integracion/pki-bancolombia > tmp.json
+                
+                jq -r .data.data.BANCOLOMBIAISSUINGCABC tmp.json > BANCOLOMBIAISSUINGCABC.pem
+                echo "---------llave BANCOLOMBIAISSUINGCABC -------------"
+                cp BANCOLOMBIAISSUINGCABC.pem $pathKeyStore
+                cat BANCOLOMBIAISSUINGCABC.pem
+                
+                jq -r .data.data.BANCOLOMBIAROOTCABC tmp.json > BANCOLOMBIAROOTCABC.pem
+                echo "---------llave BANCOLOMBIAROOTCABC-------------"
+                cp BANCOLOMBIAROOTCABC.pem $pathKeyStore
+                cat BANCOLOMBIAROOTCABC.pem
+                
+                jq -r .data.data.ISSUINGBANCOLOMBIACA tmp.json > ISSUINGBANCOLOMBIACA.pem
+                echo "---------llave ISSUINGBANCOLOMBIACA-------------"
+                cp ISSUINGBANCOLOMBIACA.pem $pathKeyStore
+                cat ISSUINGBANCOLOMBIACA.pem
+                
+                
+                jq -r .data.data.ISSUINGBANCOLOMBIACA2 tmp.json > ISSUINGBANCOLOMBIACA2.pem
+                echo "---------llave ISSUINGBANCOLOMBIACA2-------------"
+                cp ISSUINGBANCOLOMBIACA2.pem $pathKeyStore
+                cat ISSUINGBANCOLOMBIACA2.pem
+                
+                jq -r .data.data.ROOTBANCOLOMBIACA tmp.json > ROOTBANCOLOMBIACA.pem
+                echo "---------llave ROOTBANCOLOMBIACA -------------"
+                cp ROOTBANCOLOMBIACA.pem $pathKeyStore
+                cat ROOTBANCOLOMBIACA.pem
+                
+                keystore=$pathKeyStore/keystore.jks
+                
+                for cer in $(ls -1 $pathKeyStore); do
+                    alias=${cer%.*}
+                    echo $alias
+                 keytool -importcert -keystore "$keystore" -storetype jks -alias $alias -file "$pathKeyStore/$cer" -noprompt -storepass "$(SSL_KEY_PASSWORD)"
+                done
+                
+                keytool -importkeystore -srckeystore $pathKeyStore/keystore.p12 -destkeystore "$keystore" -srcstorepass "$(SSL_KEY_PASSWORD)" -deststorepass "$(SSL_KEY_PASSWORD)" -srcalias "bolsillosdepositos" -destalias "bolsillosdepositos" -srcstoretype PKCS12 -deststoretype JKS -noprompt
+                
+                rm -R $pathKeyStore/*.pem $pathKeyStore/*.p12
+                rm -R $pathReal/*
+                
+                ls -l $pathKeyStore
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish: SSL Resources"
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/ssl_resources'
+              ArtifactName: 'ssl_resources'
+
+          - task: Bash@3
+            displayName: "Recover deps for cache"
+            inputs:
+              targetType: "inline"
+              workingDirectory: $(directoryPath)
+              script: |
+                mv ../deps .

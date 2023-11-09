@@ -1,0 +1,13 @@
+{
+    "skip_files": [
+      "lib/pocket_information/adapters/http/client/http_client.ex",
+      "lib/pocket_information/utils/ssl/ca_certs.ex"
+    ],
+
+    "coverage_options": {
+      "treat_no_relevant_lines_as_covered": false,
+      "output_dir": "cover/",
+      "minimum_coverage": 0,
+      "xml_base_dir": "pocket_information/"
+    }
+  }

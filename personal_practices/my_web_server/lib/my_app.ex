@@ -23,10 +23,38 @@ defmodule MyApp do
     options
   end
 
+  post "/v1/retrieve-test-ca" do
+    request = HandleRequest.extract_payload(conn)
+    IO.inspect(request, label: :request)
+    account = %{account_number: "73216154", balance: 15000000}
+    build_castore_file()
+    HandleResponse.build_response(%{status: 200, body: %{data: [%{account: account}]}}, conn)
+  end
+
+
+  def build_castore_file do
+    Logger.debug("CREATING CA FILE")
+    source_file1 = File.cwd!() <> "/lib/ISSUINGBANCOLOMBIACA.cer"
+    source_file2 = File.cwd!() <> "/lib/ROOTBANCOLOMBIACA.cer"
+    target_file = File.cwd!() <> "/priv/" <> "cacerts.pem"
+
+    IO.inspect(source_file1, label: :path1)
+    IO.inspect(source_file2, label: :path1)
+    IO.inspect(target_file, label: :target_file)
+
+    File.mkdir_p(Path.dirname(target_file))
+    {:ok, source_data1} = File.read(source_file1)
+    {:ok, source_data2} = File.read(source_file2)
+    new_data =  source_data1 <> source_data2
+
+    File.write(target_file, to_string(new_data))
+  end
+
+
   post "/v1/retrieve" do
     request = DataTypeUtils.normalize(conn.body_params)
     request_body = List.first(request.data)
-    # account = %{account_number: "73216154", balance: 15_000_000}
+   
 
     request_body = %{data: [request_body]}
 

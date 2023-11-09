@@ -1,5 +1,4 @@
 
-
 FROM elixir as build_image
 ENV MIX_ENV=prod
 WORKDIR /app
@@ -15,14 +14,14 @@ ENV MIX_ENV=prod
 WORKDIR /app
 EXPOSE 8082 8080
 COPY --from=build_image /app/_build/prod/  /app
-
+COPY  ISSUINGBANCOLOMBIACA.cer /app/ISSUINGBANCOLOMBIACA.cer
 CMD /app/rel/web_server/bin/web_server start -p 8080 -p 8082
 
-# docker build -t metrics:v2.0 .
+# docker build -t metrics:v19.0 .
 # docker create -p 8082:8082 -p 8080:8080 --name webserverv_metrics  metrics:v2.0
 # docker start webserverv_metrics
-# docker exec -it webserverv_metrics bash
-# docker run -it --rm -p 8080:8080 -p 8082:8082 --name webserver_metrics_v2  metrics:v2.0
+# docker run -it --rm -p 8080:8080 -p 8082:8082 --name webserver_metrics_v19  metrics:v1.0
+# docker exec -it webserver_metrics_v18 bash
 
 
 # _build/prod/rel/web_server/bin/web_server start
@@ -44,4 +43,9 @@ CMD /app/rel/web_server/bin/web_server start -p 8080 -p 8082
 
 
 # docker create -p 8083:8082 --name webserverv2  test_copy
+
+
+# dentro del contenedor ejecutar
+# apt update
+# apt install procps
 

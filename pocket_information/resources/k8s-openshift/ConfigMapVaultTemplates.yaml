@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${APPLICATION_NAME}-vault-templates
+  namespace: ${NAMESPACE}
+data:
+  issuing.tmpl: |
+    {{ with secret "kv/integracion/pki-bancolombia" }}{{ .Data.data.${CERT_ISSUING_NAME} }}{{ end }}
+  root.tmpl: |
+    {{ with secret "kv/integracion/pki-bancolombia" }}{{ .Data.data.${CERT_ROOT_NAME} }}{{ end }}
+  issuing_bc.tmpl: |
+    {{ with secret "kv/integracion/pki-bancolombia" }}{{ .Data.data.${CERT_ISSUING_BC_NAME} }}{{ end }}
+  root_bc.tmpl: |
+    {{ with secret "kv/integracion/pki-bancolombia" }}{{ .Data.data.${CERT_ROOT_BC_NAME} }}{{ end }}
+  cert.tmpl: |
+    {{ with secret ${VAULT_PATH_CERT_PUBLIC_DEPOSITS} }}{{ .Data.data.cert }}{{ end }}
+  key.tmpl: |
+    {{ with secret ${VAULT_PATH_CERT_PRIVATE_DEPOSITS} }}{{ .Data.data.key }}{{ end }}
+  pass.tmpl: |
+    {{ with secret ${VAULT_PATH_CERT_PRIVATE_DEPOSITS} }}{{ .Data.data.pass }}{{ end }}

@@ -25,7 +25,8 @@ defmodule WebServer.MixProject do
     [
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.2.0"},
-      {:distillery, "~> 2.1"}
+      {:distillery, "~> 2.1"},
+      {:castore, "~> 0.1.0"},
     ]
   end
 end
